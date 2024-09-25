@@ -1,0 +1,56 @@
+import { Link } from 'react-router-dom';
+import Banner from '../Banner';
+import data from '../../data.json'
+import { useLocation } from 'react-router-dom';
+
+const introductionTabs = data.introductionTabs;
+const stadiumTabs = data.stadiumTabs;
+// sub page > club Layout
+export default function PageBox ({children,aniWidth}){
+
+    const location = useLocation();
+    const secondLocation = location.pathname.split('/')[2]; 
+    //sub > club 안의 categori 안에서 introduction 과 stadium 요소는 
+    // 각각의 다른 하위 tabmenu 를가지고 있다.
+    // 그래서 이전에는 props 로 특정한 값 ('menutext') 을 내려줘서 그와 같은 value 를 가지는 tab요소들에게
+    // active class 를 부여해 이펙트를 효과를 줬다.
+    // 이런식으로 진행하다보니 props 로 내려주는 값들이 너무 많아졌다.
+    // 그래서 새로 알게 된 기술인 useLocation 훅과 NavLink 컴포넌트를 사용하기로 했다.
+
+    // 첫번째로 NavLink 를 바로 적용했는데 기본적으로 NavLink 는  click 이벤트를 주면 현재 path 값을 참조하여 active class 가 자동으로 들어간다.
+    // 그런데 이렇게 진행하니 문제가 tabmenu 첫번째 요소는 path 값이 상위 path 값만을 가지고 있어서 현재와 동일한 path 값으로 인식이 되는지
+    // 계속 active 가 들어간 상태가 된다. 
+    // 그래서 방법으로 이것저것 계속 생각하다가 NavLink 를 사용하지 않고 Link 컴포넌트를 사용해서
+    // 토글 클래스 방식으로  location 으로 현재 path 값을 받아와 tab 요소가 가지고 있는 path 값과 비교해서 같은 때만 
+    // className = {location.pathName == el.link && 'active'} active class 를 부여하는 방법으로 진행했다.
+    // 큰 문제는 없을것 같은데 편하게 active 요소를 구현하라고 만든 방법을 사용을 못해서 다음에 조금 더 공부해 봐야겠다는 생각이 들었다.
+
+    let h2text = '';
+    if(secondLocation === 'introduction'){
+        h2text = false;
+    }else if(secondLocation === 'stadium'){
+        h2text = 'Inchoen Football Stadium'
+    }
+
+    return (
+        <>
+        <Banner aniWidth={aniWidth} />
+        <div className="size1442">
+            <h2>
+                {h2text || (<>인천,<br />한계를 돌파하라!</>) }
+                
+            </h2>
+            <div>
+                <aside>
+                    {secondLocation === 'introduction' ?
+                     introductionTabs.map((el,index)=> <button key={index}><Link className={location.pathname === el.link ? 'active' : ''} to={el.link}>{el.text}</Link></button>) 
+                     :
+                     stadiumTabs.map((el,index) => <button key={index}><Link className={location.pathname === el.link ? 'active' : ''}  to={el.link}>{el.text}</Link></button>)}
+                </aside>
+                {children}
+            </div>
+        </div>
+        </>
+    )
+
+}
