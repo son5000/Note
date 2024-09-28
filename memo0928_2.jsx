@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { format, addMonths, subMonths, getDaysInMonth, startOfMonth, addDays,subDays,endOfMonth } from 'date-fns';
+import { format, addMonths, subMonths, getDaysInMonth, startOfMonth, addDays,subDays,endOfMonth ,isSameDay} from 'date-fns';
 import { ko } from 'date-fns/locale';
 
 
@@ -103,9 +103,8 @@ export default function Calendar () {
       </ul>
       <ol>
         {calendarTiles.map((el,index)=> 
-        // 오늘에 해당하는 타일에는 border효과를 주기위해 타일의 값과 today 변수를 비교해서 active클래스를 넣어주었다.
-        // format 으로 값을 변경해준 이유는 안의 값이 초단위의 값까지 가지고 있어 비교하는데 오류가 생겼다.
-           <li className={format(el,'MM-dd') === format(today,'MM-dd') ? 'active' : '' } key={index}><span>{format(el,'d')}</span></li>
+        // isSameDay 함수를 활용해 오늘날짜와 날짜값이 같은 타일에는 active class를 부여했다.
+           <li className={isSameDay(today,el) && 'active' } key={index}><span>{format(el,'d')}</span></li>
         )}
       </ol>
       <p>※ 훈련 일정 및 장소 등은 사전 공지 없이 변경될 수 있습니다..</p>
