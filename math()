@@ -1,0 +1,193 @@
+# math
+
+### **`Math.min()`**
+
+- **용도**: 주어진 숫자 중에서 최소값을 반환합니다.
+- **문법**: `Math.min(value1, value2, ..., valueN)`
+- **예시**:
+    
+    ```jsx
+    
+    console.log(Math.min(1, 2, 3, -1, 0)); // -1
+    
+    ```
+    
+
+### **`Math.max()`**
+
+- **용도**: 주어진 숫자 중에서 최대값을 반환합니다.
+- **문법**: `Math.max(value1, value2, ..., valueN)`
+- **예시**:
+    
+    ```jsx
+    
+    console.log(Math.max(1, 2, 3, -1, 0)); // 3
+    
+    ```
+    
+
+### **`Math.abs()`**
+
+- **용도**: 주어진 숫자의 절댓값을 반환합니다.
+- **문법**: `Math.abs(value)`
+- **예시**:
+    
+    ```jsx
+    
+    console.log(Math.abs(-5)); // 5
+    
+    ```
+    
+
+### **`Math.sqrt()`**
+
+- **용도**: 주어진 숫자의 제곱근을 반환합니다.
+- **문법**: `Math.sqrt(value)`
+- **예시**:
+    
+    ```jsx
+    
+    console.log(Math.sqrt(16)); // 4
+    
+    ```
+    
+
+### **`Math.pow()`**
+
+- **용도**: 주어진 숫자의 거듭제곱을 반환합니다.
+- **문법**: `Math.pow(base, exponent)`
+- **예시**:
+    
+    ```jsx
+    
+    console.log(Math.pow(2, 3)); // 8
+    
+    ```
+    
+
+### **`Math.random()`**
+
+- **용도**: 0 이상 1 미만의 무작위 수를 반환합니다.
+- **문법**: `Math.random()`
+- **예시**:
+    
+    ```jsx
+    
+    console.log(Math.random()); // 0과 1 사이의 랜덤 숫자
+    
+    ```
+    
+
+### **`Math.round()`**
+
+- **용도**: 주어진 숫자를 가장 가까운 정수로 반올림합니다.
+- **문법**: `Math.round(value)`
+- **예시**:
+    
+    ```jsx
+    
+    console.log(Math.round(4.5)); // 5
+    
+    ```
+    
+
+### **`Math.floor()`**
+
+- **용도**: 주어진 숫자를 내림하여 가장 가까운 정수를 반환합니다.
+- **문법**: `Math.floor(value)`
+- **예시**:
+    
+    ```jsx
+    
+    console.log(Math.floor(4.9)); // 4
+    
+    ```
+    
+
+### **`Math.ceil()`**
+
+- **용도**: 주어진 숫자를 올림하여 가장 가까운 정수를 반환합니다.
+- **문법**: `Math.ceil(value)`
+- **예시**:
+    
+    ```jsx
+    
+    console.log(Math.ceil(4.1)); // 5
+    
+    ```
+    
+
+### **`Math.sin()`**
+
+- **용도**: 주어진 각도의 사인값을 반환합니다 (라디안 단위).
+- **문법**: `Math.sin(radians)`
+- **예시**:
+    
+    ```jsx
+    
+    console.log(Math.sin(Math.PI / 2)); // 1
+    
+    ```
+    
+
+### **`Math.cos()`**
+
+- **용도**: 주어진 각도의 코사인값을 반환합니다 (라디안 단위).
+- **문법**: `Math.cos(radians)`
+- **예시**:
+    
+    ```jsx
+    
+    console.log(Math.cos(0)); // 1
+    
+    ```
+    
+
+### **`Math.tan()`**
+
+- **용도**: 주어진 각도의 탄젠트값을 반환합니다 (라디안 단위).
+- **문법**: `Math.tan(radians)`
+- **예시**:
+    
+    ```jsx
+    
+    console.log(Math.tan(Math.PI / 4)); // 1
+    
+    ```
+    
+
+### **`Math.log()`**
+
+- **용도**: 주어진 숫자의 자연로그를 반환합니다 (e를 밑으로 하는 로그).
+- **문법**: `Math.log(value)`
+- **예시**:
+    
+    ```jsx
+    
+    console.log(Math.log(Math.E)); // 1
+    
+    ```
+    
+
+### **`Math.exp()`**
+
+- **용도**: e의 거듭제곱을 반환합니다.
+- **문법**: `Math.exp(value)`
+- **예시**:
+    
+    ```jsx
+    
+    console.log(Math.exp(1)); // e의 값 (약 2.718)
+    
+    ```
+    
+
+### **`Math.min()`과 `Math.max()`와 함께 배열 사용하기**
+
+- **용도**: 배열의 최소/최대값을 구할 때 사용됩니다. `Math.min`과 `Math.max`는 배열을 직접 받을 수 없으므로, `spread operator`를 사용합니다.
+- **예시**:
+
+
+    const numbers = [1, 2, 3, 4, 5];
+    console.log(Math.min(...numbers)); // 1
+    console.log(Math.max(...numbers)); // 5
