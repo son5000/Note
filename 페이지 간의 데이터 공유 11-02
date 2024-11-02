@@ -1,0 +1,55 @@
+페이지 간의 데이터 공유
+
+# 이를테면 user 의 로그인 상태 활성화
+
+`state`: 다른 페이지로 이동할 때 추가적인 데이터를 전달하며, 이를 통해 페이지 간에 정보를 공유할 수 있습니다. 이 데이터는 `useLocation` 훅을 통해 쉽게 접근할 수 있습다.
+
+
+- **설명**: 이 속성은 이동할 페이지에 전달할 데이터를 포함하는 객체. 이후에 `useLocation` 훅을 사용하여 이 상태에 접근할 수 있습니다. 이는 페이지 간에 데이터를 전달하는 데 유용하다.
+- **예시**:
+
+
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+
+const MyComponent = () => {
+  const navigate = useNavigate();
+
+  const handleNavigation = () => {
+    // 상태 객체를 포함하여 '/about'으로 이동
+    navigate('/about', { state: { from: 'home', userId: 123 } });
+  };
+
+  return (
+    <button onClick={handleNavigation}>Go to About</button>
+  );
+};
+
+
+### 수신 페이지에서의 사용
+
+이제 위 예시에서 `state`로 전달한 데이터를 수신하는 페이지에서 어떻게 사용하는지 
+
+
+import React from 'react';
+import { useLocation } from 'react-router-dom';
+
+const About = () => {
+  const location = useLocation();
+  const { state } = location; // 전달된 state 객체를 가져온다
+
+  return (
+    <div>
+      <h1>About Page</h1>
+      {state ? (
+        <p>
+          Coming from: {state.from} <br />
+          User ID: {state.userId}
+        </p>
+      ) : (
+        <p>No state passed.</p>
+      )}
+    </div>
+  );
+};
+
