@@ -1,0 +1,104 @@
+import tasks from "./data/mock.js";
+import express from "express";
+
+const app = express();
+
+// app 안에서는 모든 제이슨를 객체로 파싱.
+// use(express.json()) 을 사용하여 json을 js객체로 파싱.
+app.use(express.json());
+
+
+app.get('/tasks', (req ,res) => {
+
+    res.send(tasks);
+})
+
+
+app.get('/tasks/:id' , (req, res) => {
+
+
+    // 쿼리스트링 sort 와  count 값 활용하기 !
+    // 엔드포인트의 qurey string 은 req 의 qurey프로퍼티로 접근한다.
+    // sort 값은 qurey 프로퍼티의 sort 로 접근.
+    // 리턴되는 프로퍼티의 벨류는 모두 문자열이다.
+    // 값으로 사용하고자 한다면 Number 함수를 사용하자.
+    // const sort = req.query.sort;
+    // const count = Number(req.query.count);
+    // const compare = 
+    //     sort === 'oldest' 
+    //     ? (a,b) => a.createdAt - b.createdAt
+    //     : (a,b) => b.createdAt - a.createdAt;
+    
+    // let newTasks = tasks.sort(compare);
+    // if(count){
+    //     newTasks = newTasks.slice(0,count);
+    // }
+    // res.send(newTasks);
+
+    // params 의 id 값 사용하기 !
+    // 엔드포인트의 id 값은 req 의 params 프로퍼티로 접근이 가능하다.
+    // 이 때 값은 문자열로 문자열이니 Number 함수로 바꿔서 그다음 원하는 연산을 한다.
+    const id = Number(req.params.id);
+    const task = tasks.find((task) => task.id === id);
+
+    if(task){
+        res.send(task);
+    }else{
+        res.status(404).send({message : 'cannot find given id. '})
+    }
+    
+})
+
+
+app.post('/tasks' ,(req , res) => {
+
+    // 전달하고자 하는 json 데이터는 req 의 body프로퍼티로 접근 할 수 있다.
+    const newTask = req.body;
+
+    const ids = tasks.map((el) => el.id);
+    newTask.id = Math.max(...ids) + 1;
+    newTask.isComplete = false;
+    newTask.createdAt = new Date();
+    newTask.updateAt = new Date();
+    tasks.push(newTask);
+    res.status(201).send(newTask);
+
+})
+
+
+// PATCH메소드 사용하기
+
+app.patch('/tasks/:id' , (req, res) => {
+    const id = Number(req.params.id);
+    const task = tasks.find((task) => task.id === id);
+    const array = Object.keys(req.body);
+    console.log(array);
+    if(task){
+        Object.keys(req.body).forEach((key) => {
+            console.log(`${key} : key 입니다 req.body 객체의`)
+            task[key] = req.body[key];      
+        });
+        task.updatedAt = new Date();
+        res.send(task);
+    }else{
+        res.status(404).send({message : 'cannot find given id. '})
+    }
+    
+})
+
+// DELETE 메소드 사용하기
+app.delete('/tasks/:id' , (req, res) => {
+    const id = Number(req.params.id);
+    const idx = tasks.findIndex((task) => task.id === id);
+
+    if (idx >= 0){
+        tasks.splice(idx, 1);
+        res.sendStatus(204);
+    }else{
+        res.status(404).send({message : 'cannot find given id. '})
+    }
+    
+})
+
+
+app.listen(3000, () => console.log('server stated'))
