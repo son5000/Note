@@ -1,0 +1,31 @@
+React Context는 컴포넌트 트리에서 전역적으로 데이터를 공유할 수 있는 방법을 제공하는 React의 기능. 일반적으로 React에서 컴포넌트 간에 데이터를 전달하려면 props를 사용하지만,
+깊은 컴포넌트 트리로 props를 계속 전달해야 할 경우 코드가 복잡해질 수 있다. 
+이런 문제를 해결하기 위해 React Context를 사용하여 상위 컴포넌트에서 하위 컴포넌트로 데이터를 "직접" 전달할 수 있게 한다.
+
+React Context의 주요 개념
+React Context는 다음의 세 가지 주요 부분으로 구성됨.
+
+Context 생성 (createContext) Context를 생성하여, 데이터와 해당 데이터를 소비할 수 있는 컴포넌트를 제공하는 객체를 만듬.
+
+
+const MyContext = React.createContext(defaultValue);
+여기서 defaultValue는 Context를 구독한 컴포넌트가 아무런 Provider로 감싸지지 않았을 때 사용할 기본값.
+
+Provider Context.Provider는 Context의 값을 공급하는 컴포넌트이다. 이 컴포넌트를 통해 트리 하위의 컴포넌트들에 값을 전달할 수 있다.
+
+
+<MyContext.Provider value={/* 전달할 값 */}>
+  {/* 자식 컴포넌트 */}
+</MyContext.Provider>
+value는 해당 Context를 구독하는 컴포넌트들이 접근할 수 있는 데이터다. 이 값은 Provider로 감싼 하위 컴포넌트들에게만 전달.
+
+Consumer Context.Consumer는 Context의 값을 구독하고, 해당 값을 사용하는 컴포넌트입니다. Consumer는 함수형 컴포넌트를 자식으로 받아, 그 안에서 값을 사용하는 형태로 동작한다.
+
+
+<MyContext.Consumer>
+  {value => (
+    <div>
+      {/* value를 이용해서 화면에 렌더링 */}
+    </div>
+  )}
+</MyContext.Consumer>
