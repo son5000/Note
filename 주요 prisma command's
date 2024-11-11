@@ -1,0 +1,41 @@
+# 주요 prisma command’s
+
+- **`prisma init`**
+    
+    새로운 Prisma 프로젝트 초기화 `prisma` 폴더랑 기본 파일(`schema.prisma`, `.env` 등)을 만들어줘서 Prisma 환경을 설정하는 것
+    
+- **`prisma generate`**
+    
+    `schema.prisma` 파일을 기반으로 Prisma Client를 생성. Prisma Client는 데이터베이스와 상호작용할 때 타입 안전성을 제공하는 자동 생성된 쿼리 빌더
+    
+- **`prisma studio`**
+    
+    Prisma Studio를 실행해서 데이터베이스 데이터를 시각적으로 조회하고 수정. SQL 쿼리 안 써도 쉽게 데이터를 관리.
+    
+- **`prisma migrate dev`**
+    
+    데이터베이스에 보류 중인 마이그레이션을 적용하고 Prisma Client를 생성. 개발 중에 데이터베이스 스키마랑 Prisma 스키마를 동기화할 때.
+    
+- **`prisma db pull`**
+    
+    기존 데이터베이스에서 스키마를 가져와서 `schema.prisma` 파일을 데이터베이스 상태에 맞게 업데이트. 기존 DB에서 Prisma 스키마를 가져올 때 유용.
+    
+- **`prisma db push`**
+    
+    Prisma 스키마 파일에 정의한 내용을 데이터베이스에 바로 반영. 마이그레이션을 생성하지 않고 바로 데이터베이스에 스키마를 반영할 때.
+    
+- **`prisma validate`**
+    
+    `schema.prisma` 파일을 검증해서 오류가 있는지 확인. Prisma 스키마의 문법이나 유효성 체크할 때 사용.
+    
+- **`prisma format`**
+    
+    `schema.prisma` 파일을 자동으로 포맷팅해서 코드 스타일을 일관되게 맞춰줌. 가독성을 높이는데 유용.
+    
+- **`prisma version`**
+    
+    설치된 Prisma의 버전 정보를 출력해. 현재 사용 중인 Prisma 버전이 뭔지 확인.
+    
+- **`prisma debug`**
+    
+    Prisma 관련 디버깅 정보를 출력. Prisma 실행 중에 발생한 문제를 추적하고 디버깅할 때 유용한 정보를 보여줌.
