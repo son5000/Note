@@ -1,0 +1,118 @@
+# 캡슐화(클로저)
+
+# **1. 완벽한 캡슐화를 하는 법**
+
+```jsx
+class User {
+  constructor(email, birthdate) {
+    this.email = email;
+    this.birthdate = birthdate;
+  }
+
+  buy(item) {
+    console.log(`${this.email} buys ${item.name}`);
+  }
+
+  get email() {
+    return this._email;
+  }
+
+  set email(address) {
+    if (address.includes('@')) {
+      this._email = address;
+    } else {
+      throw new Error('invalid email address');
+    }
+  }
+}
+
+const user1 = new User('chris123@google.com', '1992-03-21');
+user1.email = 'newChris123@google.com';
+console.log(user1.email);
+```
+
+```jsx
+class User {
+  constructor(email, birthdate) {
+    this.email = email;
+    this.birthdate = birthdate;
+  }
+
+  buy(item) {
+    console.log(`${this.email} buys ${item.name}`);
+  }
+
+  get email() {
+    return this._email;
+  }
+
+  set email(address) {
+    if (address.includes('@')) {
+      this._email = address;
+    } else {
+      throw new Error('invalid email address');
+    }
+  }
+}
+
+const user1 = new User('chris123@google.com', '1992-03-21');
+user1.email = 'newChris123@google.com';
+console.log(user1.email);
+```
+
+이 코드를 보면 `_email` 프로퍼티에 직접 접근하지 말고, `email`이라는 getter/setter 메소드로만 접근해야 한다는 것이 눈에 잘 보입니다. 하지만 사실 완벽한 캡슐화가 된 상태는 아닙니다. 왜냐하면 보호하려는 프로퍼티 `_email`에 이런 식으로 여전히 직접 접근할 수는 있기 때문입니다.
+
+```jsx
+console.log(user1._email);
+user1._email = 'chris robert';
+```
+
+자바스크립트에는 캡슐화를 자체적으로 지원하는 문법이 아직 없습니다.(Java는 private이라는 키워드가 있어서 언어의 문법 차원에서 캡슐화를 지원합니다.)
+
+하지만 JavaScript에서도 다른 방식으로 우회해서 완벽한 캡슐화를 할 수는 있는데요. 클로저(Closure)라고 하는 개념을 응용해서 적용하면 됩니다. 
+
+다음코드는 user 객체 바깥에서  _email 이라는 email  파라미터의 값이 저장되는 변수가 생성돼있다.
+
+하지만 새로운 객체를 생성하고 나서도 getter 와 setter 에서 _email을 return 하고 참조 할 수 있다.
+
+```jsx
+function createUser(email, birthdate) {
+  let _email = email;
+
+  const user = {
+    birthdate,
+
+    get email() {
+      return _email;
+    },
+
+    set email(address) {
+      if (address.includes('@')) {
+        _email = address;
+      } else {
+        throw new Error('invalid email address');
+      }
+    },
+  };
+
+  return user;
+}
+
+const user1 = createUser('chris123@google.com', '19920321');
+console.log(user1.email);
+
+```
+
+### 클로저란?
+
+클로저란 자바스크립트에서 **어떤 함수와 그 함수가 참조할 수 있는 값들로 이루어진 환경을 하나로** 
+
+**묶은 것**을 의미하는데요. 예를 들어, 지금 `createUser` 함수가 실행되는 시점에 `email`이라는 
+
+getter/setter 메소드는 `_email` 이라는 변수의 값에 접근할 수 있는 상태입니다. 그리고 여기서 핵심
+
+은 이 `email` getter/setter 메소드들은 메소드를 갖고 있는 객체가 리턴된 이후더라도 여전히 
+
+`_email`에 접근하는 것이 가능하다는 점입니다. 바로 이렇게 함수가 정의된 당시에 참조할 수 있었던
+
+ 변수들을 계속 참조할 수 있는 상태의 함수를 클로저라고 합니다.
