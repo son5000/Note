@@ -1,0 +1,41 @@
+import express from 'express';
+import multer from 'multer';
+
+
+// multer 파일업로드를 다루는 미들웨어 , 주로 이미지와 같은 파일을 서버에 저장하고
+// 이를 처리할 때 사용한다.
+const upload = multer({ dest: 'uploads/'});
+// 미들웨어 설정 multer { dest: 'uploads/'} 설정은 업로드된 파일을 uploads/ 
+// 디렉토리에 저장한다는 뜻이다.
+
+// 클라이언트가 '/photos' 라는 경로로 POST 요청을 보내면 , 다음코드를 실행
+//upload.single('image')는 post 메소드를 실행하기 이전에 진행하는 미들웨어이다.
+// 이 미들웨어는 클라이언트가 보낸 단일 이미지 파일을 처리하는 미들웨어이다.
+
+// 'image'는  html 폼에서 파일 입력 필드의 name 속성과 일치해야 한다.
+// 미들웨어는  파일을 uploads 에 저장하고 파일의 대한 정보를 req.file 객체로 전달한다.
+
+// 콜백함수 진행 => req.file.filename 미들웨어로 업로드 된 파일의 이름을 가져온다.
+// path 변수는 클라이언트에게 파일을 어디서 찾을 수 있는지 알려주는 경로이다.
+// `/profile/{filename}` 과 같은 형식으로 접근이 가능하다.
+app.post('/photos', upload.single('image'), (req, res) => {
+  const filename = req.file.filename;
+  const path = `/profile/${filename}`;
+  res.json({ path });
+});
+
+// 정적 파일 제공 : 
+// app.use('/profile', express.static('uploads/')) 클라이언트가 /profile 경로로 요청할 때,
+// 서버는 uploads 디렉토리에 있는 파일을 정적 파일로 제공할 수 있도록 설정한다.
+// 예를 들어, 클라이언트가 http://localhost:3000/profile/파일명으로 요청하면 
+// uploads/ 폴더에서 해당 파일을 찾아서 반환
+
+app.use('/profile', express.static('uploads/'));
+
+app.listen(3000, () => {
+  console.log('Server is listening on port 3000');
+});
+
+// 하지만 이미지파일등 용량이 큰 파일들은 데이터베이스가 아닌 스토리지 서비스를 활용하여
+// 데이터베이스의 외부에 저장하는 경우가 대다수이다.
+// 클라이언트 측에서 서버를 거치지않고 스토리지로 바로 직업 업로드 되게 한다
