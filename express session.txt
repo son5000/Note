@@ -1,0 +1,49 @@
+//express-session은 Express.js 애플리케이션에서 세션 관리를 쉽게 도와주는 미들웨어이다.
+//세션은 사용자별 데이터를 서버에 저장하여, 사용자가 애플리케이션을 탐색하는 동안 상태를 유지할 수 있도록 한다.
+//이는 주로 로그인 상태 유지, 장바구니 기능 등 상태를 필요로 하는 작업에서 사용됨.
+
+*주요 특징
+세션 ID 생성 및 쿠키 관리
+express-session은 각 사용자에게 고유한 세션 ID를 생성.
+세션 ID는 클라이언트 브라우저에 쿠키로 저장되고, 이후 요청 시 서버로 전송.
+
+*서버에서 세션 데이터 저장.
+세션 데이터는 기본적으로 메모리에 저장되지만, Redis, MongoDB, PostgreSQL 같은 외부 저장소로 확장 가능.
+데이터베이스를 사용하면 세션 데이터를 영속적으로 관리할 수 있어 서버 재시작에도 유지.
+
+*상태 유지
+사용자가 인증되었는지, 장바구니에 어떤 아이템이 담겼는지 등과 같은 상태를 서버에서 관리.
+
+*기본 사용방법
+const express = require('express');
+const session = require('express-session');
+
+const app = express();
+
+// 세션 미들웨어 설정
+app.use(
+  session({
+    secret: 'your-secret-key', // 세션 암호화에 사용될 키
+    resave: false,             // 세션을 항상 저장할지 여부
+    saveUninitialized: true,   // 초기화되지 않은 세션도 저장할지 여부
+    cookie: {                  // 쿠키 옵션
+      secure: false,           // HTTPS 환경에서만 쿠키를 전송 (true로 설정 시 HTTPS 필요)
+      maxAge: 60000            // 쿠키 만료 시간 (밀리초 단위)
+    }
+  })
+);
+
+// 라우트 예제
+app.get('/', (req, res) => {
+  // 세션 데이터 설정
+  req.session.user = 'JohnDoe';
+  res.send('세션이 설정되었습니다.');
+});
+
+app.get('/session-info', (req, res) => {
+  // 세션 데이터 읽기
+  res.send(req.session);
+});
+
+// 서버 실행
+app.listen(3000, () => console.log('Server running on port 3000'));
