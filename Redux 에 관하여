@@ -1,0 +1,202 @@
+
+# Redux에 대해서 알아보자!
+
+## Redux 란 ?
+
+**Redux 는** 자바스크립트 **어플리케이션 상태(State)를 관리하는 라이브러리이다.**
+
+복잡한 어플리케이션 구조에서 **여러 컴포넌트가 상태를 공유하고 업데이트할 때,** 
+
+상태를 일관성 있게 유지하는 데 도움을 준다.
+
+## Redux의 핵심개념
+
+Redux는 어플리케이션의 상태를 **중앙 집중식으로 관리**한다.
+
+**주요 개념 ⇒** 
+
+- **Store**: 애플리케이션의 상태를 저장하는 곳.
+- **Action**: 상태를 변경하기 위한 의도(사용자의 요청).
+- **Reducer**: 상태를 어떻게 변경할지 정의하는 함수.
+- **Dispatch**: Action을 Store에 전달하는 메소드.
+
+### Store (스토어)
+
+<aside>
+💡
+
+**Store는 어플리케이션의 상태(State)를 보관하는 단 하나의 객체이다.**
+
+- 어플리케이션의 모든 상태는 이 Store 안에 저장된다.
+- react에서는 컴포넌트가 상태를 가지는데, redux에서는 모든 상태를
+    
+    하나의 store 에서 관리한다.
+    
+- **중앙 집중식 상태관리**
+    
+    여러 컴포넌트들이 상태를 공유하고, 
+    
+    상태 변화가 일어날 때마다 자동으로 **UI를 업테이트.**
+    
+    이 방식은 예측 가능한 상태 관리를 가능하게 해준다.
+    
+</aside>
+
+### Action(액션)
+
+<aside>
+💡
+
+**Action은 상태를 변경하겠다는 의도를 나타내는 객체이다.**
+
+- Action 객체는 **type** 과 필요한 데이터를 포함하고 있다.\
+- **type 은 **무엇을 할 것인지를 정의하고**,  데이터는 그 작업에 **필요한 정보를 포함한다.**
+</aside>
+
+```jsx
+{
+  type: 'ADD_ITEM',
+  payload: { id: 1, name: 'New Item' }
+}
+```
+
+**type 은 ‘ADD_ITEM’, 새로운 항목을 추가하겠다. payload 는 값 (데이터)**
+
+**action 은 단순히 상태를 변경할 방법을 설명하는 것에 불과하며,** 
+
+**실제 상태 변경은 Reducer에서 이루어진다.**
+
+### 3. **Reducer** (리듀서)
+
+- **Reducer**는 Action을 받아서 새로운 상태를 반환하는 **순수 함수**.
+    - 리듀서는 현재 상태와 Action을 받아 새로운 상태를 반환하는 함수다.
+    - 리듀서는 절대 **원본 상태를 변경하지 않고** 새로운 상태 객체를 반환. (불변성 유지)
+    - 여기서, `ADD_ITEM` Action이 오면 `items` 배열에 새로운 아이템을 추가하는 방식으로 상태가 변경됩니다.
+    
+    ```jsx
+    const initialState = {
+      items: []
+    };
+    
+    function itemsReducer(state = initialState, action) {
+      switch (action.type) {
+        case 'ADD_ITEM':
+          return {
+            ...state,
+            items: [...state.items, action.payload]
+          };
+        default:
+          return state;
+      }
+    }
+    ```
+    
+
+### **Redux의 흐름**
+
+1. **Action**을 만들어서 **dispatch**를 통해 Store로 전달.
+2. Store는 **Reducer**를 호출해서, **현재 상태와 Action을 기반으로 새로운 상태를 계산**.
+3. **새로 계산된 상태는 Store에 저장**되고, 그 상태는 **UI에 반영**됩니다.
+
+### Redux를 사용해야 하는 이유
+
+- **상태를 여러 컴포넌트 간에 효율적으로 관리**할 수 있다.
+- 상태 변화를 추적하고, 예측 가능하게 만들 수 있다.
+- 코드가 커지고 복잡해지더라도 유지보수가 용이.
+
+### **Redux를 React에 통합하기**
+
+**Redux를 React 애플리케이션에 적용**하는 방법.
+
+ Redux를 React에 통합하는 주요 단계는 다음과 같다 ⇒
+
+1. **Redux 라이브러리 설치하기**  
+    
+    ⇒ npm i  redux react-redux   ( redux : redux 자체 라이브러리 , react-redux : 
+    
+    React와 Redux 를 연결해주는 라이브러리.
+    
+2. **애플리케이션의 Store 구성하기**
+    
+    ⇒ redux 를 사용해서 Store 설정 redux 에서는 **createStore 를 사용해서 store 생성.**
+    
+    ```jsx
+    import { createStore } from 'redux';
+    // 초기 상태 정의
+    const initialState = {
+      count: 0
+    };
+    // Reducer 정의
+    function counterReducer(state = initialState, action) {
+      switch (action.type) {
+        case 'INCREMENT':
+          return { ...state, count: state.count + 1 };
+        case 'DECREMENT':
+          return { ...state, count: state.count - 1 };
+        default:
+          return state;
+      }
+    }
+    // Store 생성
+    const store = createStore(counterReducer);
+    ```
+    
+3. **React 컴포넌트에 Provider 연결하기**
+    
+    ⇒ react-redux 의 Provider 컴포넌트를 사용하여, Store를 React 어플리케이션에 연결해야한다.
+    
+    Provider는 React 어플리케이션을 감싸고, 그 하위 컴포넌트에서 Redux Store에 
+    
+    접근할 수 있도록 한다.
+    
+    ```jsx
+    import React from 'react';
+    import ReactDOM from 'react-dom';
+    import { Provider } from 'react-redux';
+    import App from './App';
+    import { store } from './store';  // 위에서 만든 store를 import
+    
+    ReactDOM.render(
+      <Provider store={store}>
+        <App />
+      </Provider>,
+      document.getElementById('root')
+    );
+    ```
+    
+4. **컴포넌트에서 State와 Dispatch 활용하기**
+    
+    ⇒ 컴포넌트에서 State에 접근하고,  Dispatch를 통해 Action을 보내는 방법.
+    
+    - **`useSelector`**: Redux Store에서 상태를 읽을 때 사용.
+    - **`useDispatch`**: Redux Store에 Action을 전달할 때 사용.
+    
+    ```jsx
+    import React from 'react';
+    import { useSelector, useDispatch } from 'react-redux';
+    
+    function App() {
+      // Store에서 count 값을 가져옵니다.
+      const count = useSelector(state => state.count);
+    
+      // Dispatch를 통해 Action을 보낼 수 있는 함수 가져오기
+      const dispatch = useDispatch();
+    
+      return (
+        <div>
+          <h1>Counter: {count}</h1>
+          <button onClick={() => dispatch({ type: 'INCREMENT' })}>Increment</button>
+          <button onClick={() => dispatch({ type: 'DECREMENT' })}>Decrement</button>
+        </div>
+      );
+    }
+    
+    export default App;
+    ```
+    
+
+### **Redux를 사용하는 흐름**
+
+1. **Action Dispatch**: 버튼 클릭과 같은 이벤트가 발생하면, `dispatch`를 통해 Action을 Store로 전달
+2. **State 변화**: Store는 리듀서로 Action을 전달하고, 리듀서는 이를 기반으로 새로운 상태를 반환
+3. **UI 업데이트**: 상태가 변화하면, `useSelector`로 가져온 값이 자동으로 변경되고 UI가 리렌더링
