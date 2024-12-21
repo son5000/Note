@@ -1,0 +1,38 @@
+## seed.js
+
+데이터의 초기데이터를 넣는 과정을 시딩 , 시드데이터는 데이터베이스에서 사용 할 초기 데이터이다. 데이터베이스의 초기데이터가 들어갈 초기데이터가 있어야  api 가 제대로 작동하는지 
+
+**확인하기 좋다.**
+
+데이터 베이스에 연결하는 코드 
+
+mongoose.connect(DATABASE_URL);
+
+몽구스의  api  는 거의 다음과 같은 모양이다. 
+
+DB 의 값을 불러오고 쓰는 과정은 비동기로 처리해야 하기 때문에 await 문을 사용한다.
+
+await Task.deleteMany( { } );  모델.함수 ~
+
+**deleteMany( { } ) 함수는 삭제조건을 파라미터로 받으며 빈객체를 전달하면 모든 데이터가 삭제됨.**
+
+**insertMany ( ) 는 삽입할 데이터를 파라미터로 받는다.**
+
+데이터 베이스와의 커넥션 종료 ⇒ 
+
+서버프로그램은 계속 실행된 상태로 띄워놓기 때문에 커넥션을 종료할 필요가없지만
+
+이코드는 한번 쭉 실행되고 끝나는 프로그램이기 때문에 종료문을 작성해준다.
+
+초기 세팅을 해주고 그 작업이 끝나면 종료해주는 느낌.
+
+  import mongoose from "mongoose";
+import data from './data/mock.js'
+import Task from "./models/Task.js"
+import { DATABASE_URL } from "./env.js";
+mongoose.connect(DATABASE_URL);
+
+await Task.deleteMany({});
+await Task.insertMany(data);
+
+mongoose.connection.close();
