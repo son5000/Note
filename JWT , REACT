@@ -1,0 +1,49 @@
+export const checkToken = async (dispatch, backendUrl) => {
+  const accessToken = localStorage.getItem('accessToken');
+  if (!accessToken) {
+    dispatch(ActionClear()); // 토큰이 없다면 상태 초기화
+    return;
+  }
+
+  try {
+    // 액세스 토큰이 유효한지 확인하는 API 호출
+    const response = await fetch(`${backendUrl}/user/checkingAccessToken`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      dispatch(ActionLoginLogout(data.userId)); // 유효한 토큰이면 유저 정보 갱신
+    } else {
+      // 액세스 토큰이 만료되었으면 리프레시 토큰을 사용해서 재발급
+      const refreshToken = localStorage.getItem('refreshToken');
+      const retryResponse = await fetch(`${backendUrl}/user/checkingRefreshToken`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ refreshToken }),
+      });
+
+      const data = await retryResponse.json();
+      if (retryResponse.ok) {
+        localStorage.setItem('accessToken', data.accessToken); // 새로운 액세스 토큰 저장
+        dispatch(ActionLoginLogout(data.userId)); // 유저 정보 갱신
+      } else {
+        // 리프레시 토큰도 유효하지 않다면 로그아웃 처리
+        localStorage.removeItem('accessToken')
+        localStorage.removeItem('refreshToken')
+        dispatch(ActionClear());
+      }
+    }
+  } catch (error) {
+    console.error("Error occurred:", error);
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    dispatch(ActionClear()); // 예외 발생 시 로그아웃 처리
+  }
+};
