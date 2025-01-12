@@ -1,0 +1,16 @@
+Redis 명령어
+SET key value	키-값 쌍 저장
+GET key	키에 대한 값 조회
+DEL key	키 삭제
+EXPIRE key seconds	특정 키의 만료 시간 설정
+INCR key	키의 값을 1 증가
+DECR key	키의 값을 1 감소
+LPUSH key value	리스트의 왼쪽에 값 추가
+RPUSH key value	리스트의 오른쪽에 값 추가
+LPOP key	리스트의 왼쪽에서 값 제거
+SADD key value	집합(Set)에 값 추가
+SMEMBERS key	집합(Set)의 모든 값 조회
+ZRANGE key start end	정렬된 집합(ZSet)의 범위 조회
+HSET key field value	해시(Hash)에 필드-값 추가
+HGET key field	해시(Hash)의 특정 필드 조회
+PUBSUB	Pub/Sub 채널에 메시지 발행 및 구독
