@@ -7,7 +7,7 @@ export default function Calendar () {
   const WEEKS = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
   
   // 1.오늘 날짜를 가져온다.
-  const today = new Date(); 
+  const today = new Date()
 
   // 2. 현재 달력에 표시하는 날짜의 기본값을 오늘날짜로 useState 를 사용해서 지정한다.
   const [currentDate , setCurrentDate] = useState(today);
