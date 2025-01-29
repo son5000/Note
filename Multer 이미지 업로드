@@ -1,0 +1,76 @@
+Multer는 Node.js 환경에서 이미지 파일이나 다른 형태의 파일을 업로드할 때 사용되는 미들웨어 라이브러리입니다. 주로 Express.js와 같은 웹 프레임워크와 함께 사용됩니다. Multer는 HTTP 요청의 multipart/form-data 형식으로 전송된 파일을 처리할 수 있도록 도와줍니다. 이 형식은 HTML 폼에서 파일을 업로드할 때 주로 사용됩니다.
+
+주요 기능
+파일 업로드 처리: 사용자가 업로드한 파일을 서버로 전달받아 파일 시스템이나 메모리에 저장할 수 있도록 돕습니다.
+파일 저장소 설정: 저장되는 위치를 지정할 수 있습니다. 기본적으로 파일을 서버의 로컬 디스크에 저장하지만, 클라우드 저장소(예: Amazon S3)로 저장할 수도 있습니다.
+파일 필터링: 업로드할 수 있는 파일 유형을 제한하거나, 특정 파일 형식만 허용할 수 있습니다.
+파일 크기 제한: 업로드할 수 있는 파일의 크기를 제한할 수 있습니다.
+Multer 사용법
+설치:
+
+bash
+복사
+npm install multer
+기본 설정 및 사용 예시:
+
+javascript
+복사
+const express = require('express');
+const multer = require('multer');
+const path = require('path');
+
+const app = express();
+
+// 저장소 설정 (파일이 'uploads/' 폴더에 저장됨)
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname)); // 고유한 이름으로 저장
+  }
+});
+
+// Multer 미들웨어 설정
+const upload = multer({ storage: storage });
+
+// 파일 업로드 라우트
+app.post('/upload', upload.single('file'), (req, res) => {
+  res.send('파일 업로드 완료!');
+});
+
+app.listen(3000, () => {
+  console.log('서버가 3000번 포트에서 실행 중입니다.');
+});
+위 코드에서 upload.single('file')는 HTML 폼에서 file이라는 이름을 가진 파일을 업로드 받을 때 사용됩니다. 여러 파일을 업로드하려면 upload.array('files', 3)와 같이 설정할 수 있습니다. (여기서 3은 최대 3개의 파일을 업로드할 수 있다는 의미입니다.)
+
+추가 기능
+파일 크기 제한: limits 옵션을 사용하여 파일의 크기 제한을 설정할 수 있습니다.
+
+javascript
+복사
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB 제한
+});
+파일 필터링: 업로드할 파일의 유형을 필터링할 수 있습니다.
+
+javascript
+복사
+const fileFilter = (req, file, cb) => {
+  if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+    cb(null, true); // 파일 허용
+  } else {
+    cb(new Error('지원하지 않는 파일 형식입니다.'), false); // 파일 거부
+  }
+};
+
+const upload = multer({ storage: storage, fileFilter: fileFilter });
+Multer의 장점
+파일 업로드 처리에 필요한 복잡한 작업을 간단하게 처리할 수 있습니다.
+다양한 저장소 옵션(로컬 디스크, 메모리, 클라우드 저장소)을 지원합니다.
+파일 형식과 크기 등을 유효성 검사할 수 있습니다.
+Multer는 파일 업로드와 관련된 처리를 매우 직관적으로 해주기 때문에 Node.js에서 파일 업로드를 구현할 때 많이 사용됩니다.
+
+
+
