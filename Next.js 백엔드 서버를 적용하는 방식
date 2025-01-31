@@ -1,0 +1,62 @@
+1. API Routes 사용
+Next.js는 내장된 API Routes 기능을 제공하여 백엔드 서버 없이도 서버 사이드 로직을 구현할 수 있습니다. 이를 통해 간단한 API 서버를 구성할 수 있습니다.
+
+설정 방법:
+pages/api/ 디렉토리에 API 엔드포인트를 만들면 됩니다.
+각 파일은 기본적으로 Node.js 서버처럼 동작하며, req(request)와 res(response) 객체를 처리합니다.
+예시:
+
+javascript
+복사
+// pages/api/hello.js
+export default function handler(req, res) {
+  res.status(200).json({ message: 'Hello, World!' });
+}
+특징:
+서버리스 환경에서 유용하며, Vercel에 배포 시 자동으로 서버리스 함수로 변환됩니다.
+간단한 API 처리 및 데이터베이스 연동에 적합합니다.
+2. Custom Server 사용
+Next.js는 기본적으로 제공하는 서버 외에, express나 fastify 같은 다른 백엔드 서버를 설정할 수 있습니다. 이를 통해 더 복잡한 서버 로직을 구현할 수 있습니다.
+
+설정 방법:
+server.js 파일을 프로젝트 루트에 생성하고, express 또는 원하는 서버 라이브러리와 Next.js를 통합합니다.
+예시 (Express):
+
+javascript
+복사
+// server.js
+const express = require('express');
+const next = require('next');
+
+const dev = process.env.NODE_ENV !== 'production';
+const app = next({ dev });
+const handle = app.getRequestHandler();
+
+app.prepare().then(() => {
+  const server = express();
+
+  // 예시: /api/hello 라우트 추가
+  server.get('/api/hello', (req, res) => {
+    res.json({ message: 'Hello from custom server!' });
+  });
+
+  // Next.js 라우팅 처리
+  server.all('*', (req, res) => {
+    return handle(req, res);
+  });
+
+  server.listen(3000, (err) => {
+    if (err) throw err;
+    console.log('> Ready on http://localhost:3000');
+  });
+});
+특징:
+더 복잡한 백엔드 로직이나 커스터마이징이 필요할 때 유용합니다.
+서버리스 환경이 아닌 전통적인 서버 방식으로 동작합니다.
+Vercel에서는 배포 시 커스텀 서버를 사용할 수 없지만, 다른 호스팅 서비스에서는 사용 가능합니다.
+3. 서버리스 백엔드 (Vercel, AWS Lambda 등)
+Next.js API Routes와 결합하여 서버리스 환경에서 백엔드 처리를 할 수도 있습니다. Vercel과 같은 플랫폼에서는 자동으로 서버리스 함수로 변환되므로, 별도의 서버 관리 없이 백엔드 로직을 실행할 수 있습니다.
+
+장점:
+관리가 간편하고 자동으로 확장됩니다.
+유료 서비스에서는 요청량에 따라 자동 확장이 가능하고, 비용 절감 효과를 볼 수 있습니다.
