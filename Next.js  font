@@ -1,0 +1,72 @@
+Next.js에서 외부 폰트를 가져와서 사용하는 방법은 크게 두 가지로 나눌 수 있습니다. 첫 번째는 <link> 태그를 사용하여 HTML 문서의 <head>에 폰트를 추가하는 방법이고, 두 번째는 CSS 파일에 @import를 사용하여 폰트를 추가하는 방법입니다. 여기서는 두 가지 방법을 설명해 드리겠습니다.
+
+1. <link> 태그를 사용하여 폰트 추가하기
+Google Fonts와 같은 외부 폰트를 사용할 때, <head>에 <link> 태그를 삽입하여 폰트를 로드할 수 있습니다.
+
+예시 (Google Fonts 사용)
+_document.js 파일 수정 Next.js에서 _document.js 파일을 사용하면 커스텀 HTML 문서 구조를 설정할 수 있습니다. 이 파일을 수정하여 폰트를 로드합니다.
+javascript
+복사
+편집
+// pages/_document.js
+import Document, { Html, Head, Main, NextScript } from 'next/document';
+
+class MyDocument extends Document {
+  render() {
+    return (
+      <Html lang="en">
+        <Head>
+          {/* Google Fonts에서 Roboto 폰트 가져오기 */}
+          <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+            rel="stylesheet"
+          />
+        </Head>
+        <body>
+          <Main />
+          <NextScript />
+        </body>
+      </Html>
+    );
+  }
+}
+
+export default MyDocument;
+폰트 적용하기 이제 해당 폰트를 CSS에서 사용할 수 있습니다. 예를 들어, pages/_app.js 또는 각 컴포넌트에서 다음과 같이 폰트를 설정할 수 있습니다.
+css
+복사
+편집
+/* styles/globals.css */
+body {
+  font-family: 'Roboto', sans-serif;
+}
+2. @import를 사용하여 폰트 추가하기
+@import를 사용하면 CSS 파일 내에서 외부 폰트를 가져올 수 있습니다. 이 방법은 스타일 파일에서 폰트를 직접 로드할 때 사용됩니다.
+
+예시 (Google Fonts 사용)
+CSS 파일에 폰트 추가하기 원하는 외부 폰트를 CSS 파일에 @import를 통해 불러옵니다.
+css
+복사
+편집
+/* styles/globals.css */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+  font-family: 'Roboto', sans-serif;
+}
+CSS 적용하기 이렇게 설정한 후, Next.js의 _app.js에서 전역 스타일 파일을 import하여 사용할 수 있습니다.
+javascript
+복사
+편집
+// pages/_app.js
+import '../styles/globals.css';
+
+function MyApp({ Component, pageProps }) {
+  return <Component {...pageProps} />;
+}
+
+export default MyApp;
+3. Font Loading 최적화 (옵션)
+외부 폰트를 사용할 때, 페이지 로딩 성능을 개선하기 위해 폰트 로딩 방식을 최적화할 수 있습니다. font-display: swap을 사용하면 폰트가 로드되지 않았을 때 대체 폰트가 표시되다가, 로딩 완료 후 실제 폰트로 변경됩니다. Google Fonts에서 이미 이 옵션을 설정할 수 있습니다.
+
+위 방법들 중 하나를 사용하여 외부 폰트를 Next.js에서 쉽게 적용할 수 있습니다.
