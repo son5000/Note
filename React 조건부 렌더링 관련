@@ -1,5 +1,4 @@
 // sub page > club Layout
-
 //서브페이지 작업 중에
 //club > introduction ~ … history 까지의 페이지들은 동일한 모양을 가지고 있어서 
 //layout 을 잡아주는 PageBox라는 컴포넌트를 만들어서 children  props으로 section 의
