@@ -1,0 +1,49 @@
+📌 1. SQL 쿼리 작성 순서 (우리가 작성하는 순서)
+일반적으로 SQL 쿼리는 다음과 같은 순서로 작성합니다:
+
+sql
+복사
+편집
+SELECT [컬럼명 또는 계산식]
+FROM [테이블명]
+JOIN [다른 테이블명] ON [조인 조건]
+WHERE [조건]
+GROUP BY [그룹 기준 컬럼]
+HAVING [그룹 조건]
+ORDER BY [정렬 기준 컬럼]
+LIMIT [출력할 행 개수]
+예시:
+
+sql
+복사
+편집
+SELECT name, COUNT(*) AS order_count
+FROM customers
+JOIN orders ON customers.id = orders.customer_id
+WHERE orders.status = 'completed'
+GROUP BY name
+HAVING COUNT(*) > 5
+ORDER BY order_count DESC
+LIMIT 10;
+🔍 2. SQL 쿼리 실행 순서 (DB가 처리하는 순서)
+DB 엔진이 쿼리를 실행하는 실제 순서는 다음과 같습니다:
+
+FROM → 어떤 테이블에서 데이터를 가져올지 결정
+JOIN → 필요한 경우 다른 테이블과 데이터를 합침
+WHERE → 조건에 맞는 행만 필터링
+GROUP BY → 데이터를 그룹화
+HAVING → 그룹화된 데이터에 조건 적용
+SELECT → 필요한 컬럼이나 계산식 선택
+ORDER BY → 결과를 정렬
+LIMIT → 결과의 개수 제한
+🎯 3. 읽는 법 (직관적으로 이해하기)
+SQL 쿼리를 자연어처럼 읽어보면 이해가 쉽습니다.
+
+FROM: "어디에서 데이터를 가져올까?"
+JOIN: "필요한 다른 테이블이 있나?"
+WHERE: "조건에 맞는 데이터만 남겨두자."
+GROUP BY: "이 기준으로 묶어보자."
+HAVING: "그룹화된 데이터 중에서 조건에 맞는 것만 남기자."
+SELECT: "이제 필요한 데이터만 뽑아보자."
+ORDER BY: "이 기준으로 정렬해보자."
+LIMIT: "이 정도 개수만 보여주자."
