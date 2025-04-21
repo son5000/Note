@@ -1,0 +1,98 @@
+정의  : 서버랑 클라이언트가 실시간으로, 양방향으로 대화할 수 있게 해주는 통신 방식
+
+## HTTP 와의 차이점
+
+| 구분 | HTTP (fetch, axios 등) | WebSocket |
+| --- | --- | --- |
+| 방향 | 클라이언트 → 서버 | 양방향 (서버 ↔ 클라이언트) |
+| 연결 방식 | 요청/응답 반복 | 한 번 연결 → 계속 유지 |
+| 실시간성 | 느림 (매번 요청 필요) | 빠름 (변화 즉시 전송) |
+| 사용 예 | 로그인, 게시글 조회 | 채팅, 게임, 주식 차트 |
+
+## 사용시점
+
+빠른 실시간 대화형 서비스에서 사용
+
+- 채팅 앱
+- 실시간 알림 (예: 인스타그램 메시지)
+- 주식/비트코인 가격 실시간 표시
+- 게임 서버
+
+## 예제 JS 프론트 코드
+
+- **클라이언트가 서버에 연결 요청**
+    
+    ```jsx
+    const socket = new WebSocket("ws://localhost:3000");
+    ```
+    
+- **서버가 연결 수락**
+    - 서버는 계속 열린 상태로 유지됨.
+- **양쪽에서 메시지 주고받음**
+    
+    ```jsx
+    socket.onmessage = (event) => {
+      console.log("받은 메시지:", event.data);
+    };
+    socket.send("안녕 서버야!");
+    ```
+    
+- **필요 없을 때 연결 종료**
+    
+    ```jsx
+    Socket.close();
+    ```
+    
+
+## 백엔드 언어별 예제 코드
+
+### NODE + WS (라이브러리)
+
+```
+// 서버 코드 (Node.js)
+const WebSocket = require('ws');
+const server = new WebSocket.Server({ port: 3000 });
+
+server.on('connection', socket => {
+  console.log('클라이언트 연결됨!');
+  socket.send('서버에서 인사합니다 👋');
+
+  socket.on('message', msg => {
+    console.log('받은 메시지:', msg);
+  });
+});
+```
+
+### PYTHON
+
+```bash
+pip install websockets
+```
+
+### ✅ 예제 (Python 서버):
+
+```python
+mport asyncio
+import websockets
+
+async def handler(websocket, path):
+    print("클라이언트 연결됨!")
+    await websocket.send("서버: 안녕하세요 👋")
+
+    async for message in websocket:
+        print("클라이언트:", message)
+        await websocket.send(f"서버가 받은 메시지: {message}")
+
+start_server = websockets.serve(handler, "localhost", 3000)
+
+asyncio.get_event_loop().run_until_complete(start_server)
+asyncio.get_event_loop().run_forever()
+
+```
+
+```
+const socket = new WebSocket("ws://localhost:3000");
+socket.onmessage = e => console.log("서버 응답:", e.data);
+socket.send("클라이언트 메시지!");
+
+```
